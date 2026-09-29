@@ -1,5 +1,10 @@
 # ku-thesis-template
 
+[![Open in Overleaf](https://img.shields.io/badge/Open%20in-Overleaf-47A141?logo=overleaf&logoColor=white)](https://www.overleaf.com/docs?snip_uri=https://github.com/jeppeaarup/ku-thesis-template/archive/refs/heads/main.zip&snip_name=KU%20Thesis%20Template&engine=pdflatex)
+![License](https://img.shields.io/github/license/jeppeaarup/ku-thesis-template)
+![LaTeX](https://img.shields.io/badge/LaTeX-pdfLaTeX-008080?logo=latex&logoColor=white)
+![Last commit](https://img.shields.io/github/last-commit/jeppeaarup/ku-thesis-template)
+
 A LaTeX thesis template for the University of Copenhagen (KU), with a title page that follows the KU design guide, IEEE references, an abbreviation list, running headers and an appendix.
 
 ## Features
@@ -23,12 +28,12 @@ A LaTeX thesis template for the University of Copenhagen (KU), with a title page
 | `chapters/` | Main text and appendix |
 | `figures/` | Your images |
 | `logos/` | KU logos used by the title page |
-| `ku-titlepage.sty` | Title page package (https://github.com/jeppeaarup/ku-titlepage)|
+| `ku-titlepage.sty` | Title page package ([source](https://github.com/jeppeaarup/ku-titlepage)) |
 | `references.bib` | Your bibliography |
 
 ## Getting started
 
-1. Clone or download the repository.
+1. Clone or download the repository, or open it directly in Overleaf with the badge above.
 2. Edit `frontmatter/titlepage.tex` with your title, name, assignment type and supervisor.
 3. Choose your faculty in `config/preamble.tex`:
    `\usepackage[science, titlepage]{ku-titlepage}`
@@ -38,6 +43,35 @@ A LaTeX thesis template for the University of Copenhagen (KU), with a title page
 6. Add abbreviations in `config/acronyms.tex` and use them with `\ac{key}`.
 7. Remove the placeholder text (`\lipsum`) from the abstract, preface and chapters.
 
+## Building
+
+The template uses pdfLaTeX and `biber`. The simplest way to build is:
+
+    latexmk -pdf main.tex
+
+If you compile manually, run pdfLaTeX, then `biber main`, then pdfLaTeX twice more. Run LaTeX twice after changing abbreviations.
+
 ## Quick reference
 
-**Headers.** Each front matter part sets its header with `\headermark{Name}` in `main.tex`. Sections set their
+**Abbreviations** (defined in `config/acronyms.tex`)
+
+| Command | Result |
+|---|---|
+| `\ac{key}` | Full form on first use, short form after |
+| `\acs{key}` / `\acl{key}` | Always short / always long |
+| `\acp{key}` | Plural |
+| `\Ac{key}` | Capitalised, for the start of a sentence |
+
+**Headers.** Each front matter part sets its header with `\headermark{Name}` in `main.tex`. Sections set their own header text.
+
+**Appendix.** Put appendix sections in `chapters/appendix.tex`. They are lettered automatically and the header reads "APPENDIX A", "APPENDIX B", and so on.
+
+**Colours.** Links are coloured with the KU red (RGB 144, 26, 30), set in `config/references.tex`.
+
+## Requirements
+
+A recent TeX distribution (TeX Live or MiKTeX) with `biber` and these packages: `biblatex`, `acro`, `cleveref`, `hyperref`, `titlesec`, `tocloft`, `fancyhdr`, `geometry`, `babel`, `csquotes`, `xcolor` and the TeX Gyre fonts. They are included in a full installation.
+
+## License
+
+MIT License. See `LICENSE`.
