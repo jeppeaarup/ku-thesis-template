@@ -1,11 +1,14 @@
 # ku-thesis-template
 
-[![Open in Overleaf](https://img.shields.io/badge/Open%20in-Overleaf-47A141?logo=overleaf&logoColor=white)](https://www.overleaf.com/docs?snip_uri=https://github.com/jeppeaarup/ku-thesis-template/archive/refs/heads/main.zip&snip_name=KU%20Thesis%20Template&engine=pdflatex)
 ![License](https://img.shields.io/github/license/jeppeaarup/ku-thesis-template)
 ![LaTeX](https://img.shields.io/badge/LaTeX-pdfLaTeX-008080?logo=latex&logoColor=white)
 ![Last commit](https://img.shields.io/github/last-commit/jeppeaarup/ku-thesis-template)
 
 A LaTeX thesis template for the University of Copenhagen (KU), with a title page that follows the KU design guide, IEEE references, an abbreviation list, running headers and an appendix.
+
+Click the button below to open the template in Overleaf:
+
+[![Open in Overleaf](https://img.shields.io/badge/Open%20in-Overleaf-47A141?logo=overleaf&logoColor=white)](https://www.overleaf.com/docs?snip_uri=https://github.com/jeppeaarup/ku-thesis-template/archive/refs/heads/main.zip&snip_name=ku-thesis-template&engine=pdflatex)
 
 ## Features
 
