@@ -1,0 +1,233 @@
+% ku-titlepage.sty
+%------------------------------------------------------------------------------
+% Distributed under the terms of the MIT License
+%
+% LaTeX style for front pages adhering to University of Copenhagen's design
+% guide (http://designguide.ku.dk/).
+%
+% Author:
+%   Jeppe Aarup Andersen (https://github.com/jeppeaarup)
+%
+% Inspired by Mads Ohm Larsen's package 'ku-frontpage' from 2021
+% (https://github.com/omegahm/ku-frontpage). This version was updated with
+% more flexible inputs as well as a letterhead that conforms to the offical
+% design guide as of 27-09-2026.
+%------------------------------------------------------------------------------
+%
+% Public API — commands you can call from your document (e.g. titlepage.tex)
+%
+%   Content:
+%     \assignment{text}      \author{text}        \title{text}
+%     \subtitle{text}        \supervisor{text}    \date{text}
+%     \frontpageimage{path}
+%
+%   Position (all take mm as plain numbers, x then y, distance from
+%   left/top edge of page). The assignment and author lines share one
+%   position and are separated by a hardcoded \vspace in the .sty:
+%     \assignmentposition{x}{y}      \titleposition{x}{y}
+%     \supervisorposition{x}{y}      \dateposition{x}{y}
+%
+%   The front page image is horizontally centered on the page by default.
+%   Calling \frontpageimageposition{x}{y} switches it to that fixed x (and y):
+%     \frontpageimageposition{x}{y}
+%
+%   Font size (point size, then line spacing — both need explicit units,
+%   e.g. \titlefontsize{22pt}{22pt}):
+%     \assignmentfontsize{size}{lineheight}   \authorfontsize{size}{lineheight}
+%     \titlefontsize{size}{lineheight}        \subtitlefontsize{size}{lineheight}
+%     \supervisorfontsize{size}{lineheight}   \datefontsize{size}{lineheight}
+%
+%   Front page image size (width, then height — needs explicit units or a
+%   length like \textwidth, e.g. \frontpageimagesize{0.8\textwidth}{120mm}):
+%     \frontpageimagesize{width}{height}
+%
+%------------------------------------------------------------------------------
+\ProvidesPackage{ku-titlepage}[27-09-2026. Titlepages with University of Copenhagen logos]
+
+% Style option switches
+\newif\if@kutitlepage\@kutitlepagefalse \DeclareOption{titlepage}{\@kutitlepagetrue}
+\newif\if@kublank\@kublankfalse         \DeclareOption{blank}{\@kublanktrue}
+
+% Faculty option switches
+\newif\if@teo                           \DeclareOption{teo}{\@teotrue}
+\newif\if@science                       \DeclareOption{science}{\@sciencetrue}
+\newif\if@sund                          \DeclareOption{sund}{\@sundtrue}
+\newif\if@samf                          \DeclareOption{samf}{\@samftrue}
+\newif\if@jura                          \DeclareOption{jura}{\@juratrue}
+\newif\if@hum                           \DeclareOption{hum}{\@humtrue}
+
+% Warn on any option that isn't recognized above
+\DeclareOption*{
+  \ClassWarning{ku-letterhead}{Unknown option '\CurrentOption'}
+}
+
+% Fall back to science faculty if no faculty option is given
+\ExecuteOptions{science}
+
+% Read and apply whichever options were passed
+\ProcessOptions\relax
+
+% Resolve the chosen style into \KUSTYLE
+\if@kutitlepage \def\KUSTYLE{titlepage} \fi
+\if@kublank     \def\KUSTYLE{blank}     \fi
+
+% Resolve the chosen faculty into \KUFACULTY
+\if@science     \def\KUFACULTY{science} \fi
+\if@teo         \def\KUFACULTY{teo}     \fi
+\if@sund        \def\KUFACULTY{sund}    \fi
+\if@samf        \def\KUFACULTY{samf}    \fi
+\if@jura        \def\KUFACULTY{jura}    \fi
+\if@hum         \def\KUFACULTY{hum}     \fi
+
+% Packages this file depends on
+\setlength{\paperwidth}{210mm}
+\setlength{\paperheight}{297mm}
+\ifdefined\pdfpagewidth \pdfpagewidth=\paperwidth \fi
+\ifdefined\pdfpageheight \pdfpageheight=\paperheight \fi
+\RequirePackage{eso-pic}
+\RequirePackage{graphicx}
+\RequirePackage{ifthen}
+
+% Fonts, matching the KU thesis template: Pagella body, Heros sans headings
+\RequirePackage[T1]{fontenc}
+\RequirePackage{tgpagella}
+\RequirePackage{tgheros}
+\RequirePackage[sc]{mathpazo}
+
+% Absolute-position grid, one unit per mm on an A4 page
+\RequirePackage[absolute]{textpos}
+\TPGrid{210}{297}
+
+% Placeholder text shown if a field is never set
+\def\ASSIGNMENT{Use \texttt{$\backslash$assignment$\lbrace \ldots \rbrace$}}
+\def\AUTHOR{Use \texttt{$\backslash$author$\lbrace \ldots \rbrace$}}
+\def\TITLE{Use \texttt{$\backslash$title$\lbrace \ldots \rbrace$}}
+\def\SUBTITLE{Use \texttt{$\backslash$subtitle$\lbrace \ldots \rbrace$}}
+\def\SUPERVISOR{Use \texttt{$\backslash$supervisor$\lbrace \ldots \rbrace$}}
+\def\DATE{Use \texttt{$\backslash$date$\lbrace \ldots \rbrace$}}
+\def\FRONTPAGEIMAGE{}
+
+% Override the kernel's \author/\title/\date to store into our own fields
+\renewcommand{\author}[1]{\def\AUTHOR{#1}}
+\renewcommand{\title}[1]{\def\TITLE{#1}}
+\renewcommand{\date}[1]{\def\DATE{#1}}
+
+% New commands for the fields with no kernel equivalent
+\newcommand{\assignment}[1]{\def\ASSIGNMENT{#1}}
+\newcommand{\subtitle}[1]{\def\SUBTITLE{#1}}
+\newcommand{\supervisor}[1]{\def\SUPERVISOR{#1}}
+\newcommand{\frontpageimage}[1]{\def\FRONTPAGEIMAGE{#1}}
+
+% Default field positions, in mm on the grid above
+\newcommand{\KUassignmentposx}{20} \newcommand{\KUassignmentposy}{195}
+\newcommand{\KUtitleposx}{20}      \newcommand{\KUtitleposy}{217}
+\newcommand{\KUsupervisorposx}{20} \newcommand{\KUsupervisorposy}{260}
+\newcommand{\KUdateposx}{20}       \newcommand{\KUdateposy}{267}
+\newcommand{\KUfrontpageimageposx}{19}  % mm from left; unused unless \frontpageimageposition is called
+\newcommand{\KUfrontpageimageposy}{185} % mm from top
+
+% Tracks whether \frontpageimageposition was called; while false (the
+% default) the front page image is centered horizontally instead.
+\newif\if@kufpimgposset\@kufpimgpossetfalse
+\newlength{\@kufpimgwidthlen}
+
+% Default field font sizes: point size, then line spacing
+\newcommand{\KUassignmentsize}{14pt} \newcommand{\KUassignmentlineheight}{16pt}
+\newcommand{\KUauthorsize}{14pt}     \newcommand{\KUauthorlineheight}{16pt}
+\newcommand{\KUtitlesize}{20pt}      \newcommand{\KUtitlelineheight}{28pt}
+\newcommand{\KUsubtitlesize}{14pt}   \newcommand{\KUsubtitlelineheight}{16pt}
+\newcommand{\KUsupervisorsize}{12pt} \newcommand{\KUsupervisorlineheight}{5pt}
+\newcommand{\KUdatesize}{12pt}       \newcommand{\KUdatelineheight}{5pt}
+
+% Default front page image dimensions
+\newcommand{\KUfrontpageimagewidth}{\textwidth}
+\newcommand{\KUfrontpageimageheight}{100mm}
+
+% Position setters — call before \maketitle to move a field
+\newcommand{\assignmentposition}[2]{\renewcommand{\KUassignmentposx}{#1}\renewcommand{\KUassignmentposy}{#2}}
+\newcommand{\titleposition}[2]{\renewcommand{\KUtitleposx}{#1}\renewcommand{\KUtitleposy}{#2}}
+\newcommand{\supervisorposition}[2]{\renewcommand{\KUsupervisorposx}{#1}\renewcommand{\KUsupervisorposy}{#2}}
+\newcommand{\dateposition}[2]{\renewcommand{\KUdateposx}{#1}\renewcommand{\KUdateposy}{#2}}
+\newcommand{\frontpageimageposition}[2]{\@kufpimgpossettrue\renewcommand{\KUfrontpageimageposx}{#1}\renewcommand{\KUfrontpageimageposy}{#2}}
+
+% Font size setters — call before \maketitle to resize a field
+\newcommand{\assignmentfontsize}[2]{\renewcommand{\KUassignmentsize}{#1}\renewcommand{\KUassignmentlineheight}{#2}}
+\newcommand{\authorfontsize}[2]{\renewcommand{\KUauthorsize}{#1}\renewcommand{\KUauthorlineheight}{#2}}
+\newcommand{\titlefontsize}[2]{\renewcommand{\KUtitlesize}{#1}\renewcommand{\KUtitlelineheight}{#2}}
+\newcommand{\subtitlefontsize}[2]{\renewcommand{\KUsubtitlesize}{#1}\renewcommand{\KUsubtitlelineheight}{#2}}
+\newcommand{\supervisorfontsize}[2]{\renewcommand{\KUsupervisorsize}{#1}\renewcommand{\KUsupervisorlineheight}{#2}}
+\newcommand{\datefontsize}[2]{\renewcommand{\KUdatesize}{#1}\renewcommand{\KUdatelineheight}{#2}}
+
+% Front page image size setter — call before \maketitle to resize the image
+\newcommand{\frontpageimagesize}[2]{\renewcommand{\KUfrontpageimagewidth}{#1}\renewcommand{\KUfrontpageimageheight}{#2}}
+
+% \maketitle definitions, one per style option
+\if@kutitlepage
+  \def\maketitle{%
+    \begingroup
+    \parindent=0pt\relax
+    \parskip=0pt\relax
+    \renewcommand{\baselinestretch}{1}\relax
+    \thispagestyle{empty}
+    \AddToShipoutPicture*{\AtPageLowerLeft{\includegraphics*{logos/a4_text_\KUFACULTY}}}
+    \AddToShipoutPicture*{\AtPageLowerLeft{\includegraphics*{logos/a4_logo}}}
+
+    \ifthenelse{\equal{\FRONTPAGEIMAGE}{}}{}{
+      \if@kufpimgposset
+        \AddToShipoutPicture*{
+          \AtPageUpperLeft{\raisebox{-\KUfrontpageimageposy mm}{\hspace{\KUfrontpageimageposx mm}\includegraphics*[width=\KUfrontpageimagewidth, height=\KUfrontpageimageheight, keepaspectratio]{\FRONTPAGEIMAGE}}}
+        }
+      \else
+        % No explicit position given: center the image horizontally on
+        % the page, based on the actual rendered width of the graphic
+        % (keepaspectratio may shrink it below \KUfrontpageimagewidth).
+        \settowidth{\@kufpimgwidthlen}{\includegraphics*[width=\KUfrontpageimagewidth, height=\KUfrontpageimageheight, keepaspectratio]{\FRONTPAGEIMAGE}}
+        \AddToShipoutPicture*{
+          \AtPageUpperLeft{\raisebox{-\KUfrontpageimageposy mm}{\hspace{\dimexpr(\paperwidth-\@kufpimgwidthlen)/2\relax}\includegraphics*[width=\KUfrontpageimagewidth, height=\KUfrontpageimageheight, keepaspectratio]{\FRONTPAGEIMAGE}}}
+        }
+      \fi
+    }
+
+    \begin{textblock}{170}(\KUassignmentposx,\KUassignmentposy)
+      \noindent{\fontsize{\KUassignmentsize}{\KUassignmentlineheight}\bfseries\sffamily\selectfont\ASSIGNMENT\par}
+      \vspace{2mm} % <- hardcode the gap between the assignment and author lines here
+      \noindent\fontsize{\KUauthorsize}{\KUauthorlineheight}\sffamily\selectfont\AUTHOR
+    \end{textblock}
+
+    \begin{textblock}{170}(\KUtitleposx,\KUtitleposy)
+      \noindent{\fontsize{\KUtitlesize}{\KUtitlelineheight}\bfseries\sffamily\selectfont\TITLE\par}
+      \vspace{4mm}
+      \noindent\fontsize{\KUsubtitlesize}{\KUsubtitlelineheight}\sffamily\selectfont\SUBTITLE
+    \end{textblock}
+
+    \begin{textblock}{170}(\KUsupervisorposx,\KUsupervisorposy)
+      \noindent\fontsize{\KUsupervisorsize}{\KUsupervisorlineheight}\sffamily\selectfont\SUPERVISOR
+    \end{textblock}
+
+    \begin{textblock}{170}(\KUdateposx,\KUdateposy)
+      \noindent\fontsize{\KUdatesize}{\KUdatelineheight}\sffamily\selectfont\DATE
+    \end{textblock}
+
+    \phantom{...}
+    \newpage
+    \endgroup
+    \noindent
+  }
+\fi
+
+\if@kublank
+  \def\maketitle{%
+    \begingroup
+    \parindent=0pt\relax
+    \parskip=0pt\relax
+    \renewcommand{\baselinestretch}{1}\relax
+    \thispagestyle{empty}
+    \AddToShipoutPicture*{\AtPageLowerLeft{\includegraphics*{logos/a4_text_\KUFACULTY}}}
+    \AddToShipoutPicture*{\AtPageLowerLeft{\includegraphics*{logos/a4_logo}}}
+
+    \phantom{...}
+    \newpage
+    \endgroup
+    \noindent
+  }
+\fi

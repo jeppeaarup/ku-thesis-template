@@ -1,0 +1,14 @@
+% FONT PACKAGES ARE LOADED IN preamble.tex
+
+% Set fonts for section, subsection, subsubsection titles ---
+\titleformat*{\section}{\large\bfseries\fontencoding{T1}\sffamily\selectfont}
+\titleformat*{\subsection}{\fontsize{12}{14}\selectfont\bfseries\fontencoding{T1}\sffamily}
+\titleformat*{\subsubsection}{\fontsize{11}{12}\selectfont\bfseries\fontencoding{T1}\sffamily}
+
+% Spacing around headings: {left indent}{space before}{space after}
+\titlespacing*{\section}{0pt}{24pt plus 4pt minus 2pt}{2pt}
+\titlespacing*{\subsection}{0pt}{18pt plus 3pt minus 2pt}{0pt}
+\titlespacing*{\subsubsection}{0pt}{14pt plus 2pt minus 1pt}{-2pt}
+
+% Set TOC title font (uses tocloft package) ---
+\renewcommand{\cfttoctitlefont}{\Large\bfseries\fontencoding{T1}\sffamily\selectfont}

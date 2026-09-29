@@ -1,0 +1,59 @@
+% Paper layout setup ---
+\geometry{a4paper,
+hmargin = {20mm, 20mm}, % Right and left margin
+vmargin = {30mm, 30mm}, % Top and bottom margin
+headheight = 14.5pt % Reserve enough vertical space for the running header
+}
+
+
+% Header and footer setup ---
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\subsectionmark}[1]{%
+  \markright{\MakeUppercase{\thesubsection.\ #1}}%
+}
+
+
+\fancyhead[L]{{\small\transparent{0.6}\sffamily\rightmark}}
+\fancyhead[R]{{\small\transparent{0.6}\sffamily\leftmark}}
+\fancyfoot[C]{\thepage}
+
+
+% Set the header text for unnumbered parts (frontmatter, references) ---
+\newcommand{\headermark}[1]{\markboth{\MakeUppercase{#1}}{}}
+
+% Keep the header on the table of contents page ---
+\tocloftpagestyle{fancy}
+
+
+% Text layout ----
+\onehalfspacing % Set line spacing to 1.5
+\frenchspacing % Make spacing after . equal to rest
+
+\setlength{\parskip}{8pt plus 2pt minus 2pt}
+\setlength{\parindent}{0pt} % No indent on new paragraphs
+
+\setlist{
+  itemsep=0pt, % Affects only space between lists and sublists
+  parsep=1pt, % Affects spacing between both items and sublists
+  topsep=0pt, % Affects top AND bottom of all lists (also between lists and sublists)
+  partopsep=5pt % Affects only space between text and list
+}
+
+
+% --- Other layout settings ---
+\setcounter{tocdepth}{3} % Set TOC depth
+
+
+% --- Layout functions ---
+
+% Make tickbox for AI declaration
+\newcommand{\tickbox}[1][]{%
+  \ifx\relax#1\relax
+    $\square$%
+  \else
+    \makebox[0pt][l]{$\square$}\hspace{0.15em}\raisebox{0.1ex}{$\checkmark$}%
+  \fi
+}
+

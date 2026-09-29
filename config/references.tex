@@ -1,0 +1,23 @@
+% References setup ---
+\addbibresource{references.bib}
+
+% Make references header show up in TOC
+\defbibheading{bibintoc}[References]{\section*{#1}\addcontentsline{toc}{section}{#1}}
+
+
+% Hyperref setup ----
+\definecolor{REFcolor}{RGB}{144,26,30} % KU offical red 
+
+\hypersetup{
+    colorlinks,         % Color the link text instead of drawing boxes
+    citecolor=REFcolor, % Color of citations
+    urlcolor=REFcolor,  % Web addresses
+    linkcolor=black,    % Color of internal links: TOC, sections etc.
+    linktoc=all,        % Make both TOC title and page number clickable
+    bookmarksnumbered=true, % Show section numbers in the PDF sidebar
+    }
+
+\urlstyle{same} % Print web addresses in the normal text font
+
+% Acronyms setup ----
+\input{config/acronyms.tex} % Abbreviation definitions

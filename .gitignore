@@ -1,0 +1,21 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl*
+*.bcf*
+*.xml
+*.blg
+*.nav
+*.snm
+*.vrb
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db

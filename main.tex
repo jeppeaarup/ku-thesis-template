@@ -1,0 +1,58 @@
+\documentclass[12pt]{article}
+
+\input{config/preamble.tex} % Load preamble
+
+\begin{document}
+
+
+% Frontmatter ----
+\input{frontmatter/titlepage.tex}
+
+\newpage
+
+\pagenumbering{roman}
+
+\headermark{AI declaration}
+\input{frontmatter/ai-declaration.tex}
+\clearpage
+
+\headermark{Abstract}
+\input{frontmatter/abstract.tex}
+\clearpage
+
+\headermark{Preface}
+\input{frontmatter/preface.tex}
+\clearpage
+
+\headermark{Contents}
+\tableofcontents
+\clearpage
+
+\headermark{Abbreviations}
+\input{frontmatter/abbreviations.tex}
+\clearpage
+
+
+% Main content ----
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\input{chapters/first_file.tex}
+
+
+% Bibliography ----
+\clearpage
+\headermark{References}
+\printbibliography[heading=bibintoc, title={References}]
+
+
+% Appendix ----
+\clearpage
+\begin{appendices}
+    % Set appendix header mark
+    \renewcommand{\sectionmark}[1]{\markboth{APPENDIX \thesection}{}} 
+
+    \input{chapters/appendix.tex}
+\end{appendices}
+
+\end{document}

@@ -1,0 +1,56 @@
+% --- Page layout ---
+\usepackage{geometry} % For customizing page layout
+\usepackage{fancyhdr} % Headers, footers, page number etc.
+\usepackage[science, titlepage]{ku-titlepage} % Create KU titlepage
+
+% --- Figures and tables ---
+\usepackage{graphicx} % Required for inserting images
+\usepackage{subcaption} % For subfigures
+\usepackage{tabularx} % For customizing tables
+\usepackage{booktabs} % For better table lines
+
+
+% --- Math ---
+\usepackage{amsmath} % For math stuff
+\usepackage{amssymb} % For math symbols
+\usepackage{bm} % For bold math symbols
+
+
+% --- Fonts ---
+\usepackage[T1]{fontenc} % For font encoding
+\usepackage{tgpagella}
+\usepackage{tgheros}
+\usepackage[sc]{mathpazo}
+
+
+% --- Heading & TOC styling ---
+\usepackage{titlesec} % For setting fonts/sizes on headings
+\usepackage{tocloft} % For setting fonts/sizes on TOC headings
+
+
+% --- Citing and referencing ---
+\usepackage[style=ieee]{biblatex} % IEEE style: numbered [1], ordered by first citation
+\usepackage{appendix} % For setting up appendix titles
+\usepackage{hyperref} % Hyperrefs in TOC, cites, refs etc.
+\usepackage[nameinlink, noabbrev]{cleveref} % For better crossrefs
+
+
+% --- Text layout ---
+\usepackage{setspace} % For setting line spacing
+\usepackage{enumitem} % For customizing lists
+\usepackage[english]{babel} % English hyphenation and auto-generated words
+\usepackage{csquotes}       % Language-aware quotation marks
+
+
+% --- Misc packages ---
+\usepackage[style=ddmmyyyy]{datetime2} % Generates todays date
+\usepackage{lipsum} % Generates lorem ipsum tex
+\usepackage{transparent} % For transparent text effects
+\usepackage{acro} % Abbreviations with first-use expansion and a list
+\usepackage[dvipsnames]{xcolor} % Colours
+
+
+% --- Settings in external files ---
+\input{config/fonts.tex} % Headers, TOC etc.
+\input{config/layout.tex} % Page layout, lists etc.
+\input{config/references.tex} % Cite, acronyms, reference, hyperref, etc. 
